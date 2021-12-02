@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="shortcut icon" type="image/ico" href="favicon.ico">
+    <title>Flyde's web</title>
+
+    <link rel="stylesheet" href="static/css/bootstrap.css" />
+    <link rel="stylesheet" href="static/css/main.css" />
+  </head>
+  <body>
+
+    <!-- Header -->
+    <header class="site-header">
+      <div class="container expanded">
+        <div class="header-wrap">
+          <div class="header-logo">
+              <img src="static/picture/logo.png" style="max-width: 150px;" alt="">
+          </div>
+          <div class="header-nav">
+              <ul class="main-menu">
+				<li class="scroll-to-section"><a href="">专注于php,Mysql,Golang技术梳理沉淀</a></li>
+              </ul>
+          </div>
+          
+        </div>
+      </div>
+    </header>
+    <!-- /Header -->
+    <div class="main-banner" id="top">
+      <div class="container">
+        <h3>技术心得(PHP,MySQL,Nginx)</h3>
+        <div class="row">
+			<h5>Nginx并发访问控制</h5>
+            <p>
+              Nginx 可以通过`ngx_http_limit_req_module`和`ngx_http_limit_conn_module`这两个模块实现控制并发和限流，在一定程度的防止服务器遇到 DDoS 攻击或网络爬虫时被太多请求击溃。 `ngx_http_limit_req_module`  用来限制单位时间内的请求数，即速率限制。 `ngx_http_limit_conn_module` 用来限制同一时间连接数，即并发限制。
+            </p>
+        </div>
+        <div class="row">
+			<h5>三范式</h5>
+            <p>
+              1.第一范式（1NF）
+              即表的列的具有原子性,不可再分解，即列的信息，不能分解, 只要数据库是关系型数据库(mysql/oracle/db2/informix/sysbase/sql server)，就自动的满足1NF。
+              比如用户表：用户ID,姓名,年龄,邮箱,地址,手机号
+              2.第二范式（2NF）
+              第二范式（2NF）是在第一范式（1NF）的基础上建立起来的，即满足第二范式（2NF）必须先满足第一范式（1NF）。第二范式（2NF）要求数据库表中的每个实例或行必须可以被惟一地区分。为实现区分通常需要我们设计一个主键来实现(这里的主键不包含业务逻辑)
+              3.第三范式（3NF）
+              满足第三范式（3NF）必须先满足第二范式（2NF）。简而言之，第三范式（3NF）要求一个数据库表中不包含已在其它表中已包含的非主键字段。就是说，表的信息，如果能够被推导出来，就不应该单独的设计一个字段来存放(能尽量外键join就用外键join)。很多时候，我们为了满足第三范式往往会把一张表分成多张表
+              经典范式设计：RBAC（Role-Based Access Control），用户表、角色表、权限表、用户角色表、角色权限表
+              再比如商品信息表：商品ID,商品名称,商品描述,商品价格,重量,分类,分类描述，这种就可以将分类信息拆分出来，独立成为分类表，再加一个商品与分类关联的表
+              反三范式
+              没有冗余的数据库未必是最好的数据库，有时为了提高运行效率，就必须降低范式标准，适当保留冗余数据。具体做法是： 在概念数据模型设计时遵守第三范式，降低范式标准的工作放到物理数据模型设计时考虑。降低范式就是增加字段，减少了查询时的关联，提高查询效率，因为在数据库的操作中查询的比例要远远大于DML的比例。但是反范式化一定要适度，并且在原本已满足三范式的基础上再做调整的
+              范式化的优点：
+              1.范式化更新操作通常比反范式化要快。
+              2.当数据较好的范式化时，就只有很少或者没有重复数据，所以，只需要修改更少的数据。
+              3.范式化的表通常更小，可以更好地放在内存里，所以执行操作会更快。
+              4.很少有多余的数据意味着检索列表数据更少需要distinct或者group by 语句。
+              范式化的缺点：
+              范式化设计通常需要关联。稍微复杂一些的查询语句可能需要至少一次关联，也许更多。这样做代价昂贵，也可能使一些索引策略无效。比如，范式化可能将列放在不同的表中，而这些列在同一个表中可以数据同一个索引。
+              反范式的优点：
+              1.可以很好地避免关联。
+              2.如果不需要关联表，对大部分查询最差情况，即没有使用索引，全表扫描。当数据币内存大时这可能比关联要快很多， 这样避免了随机I/O。
+              总结：事实上，完全分范式化和反范式化都是实验室里才会出现的，在实际项目中，经常需要混用，可能会使用部分范式化、缓存表以及其他技巧。对于开发者来说，是应该从遵循范式到逐渐打破范式的一个循序渐进的一个过程，只有你足够了解范式的优缺点之后才能知道在什么情况下去打破范式，从而设计出更合理的反范式部分。
+            </p>
+        </div>
+        <div>
+          <p>
+            <img width="600px" src="static/images/computer.jpg" />
+          </p>
+        </div>
+        <div class="row">
+			<h5>程序中使用SQL的一些建议</h5>
+            <p>
+              1.【建议】对于使用框架构建的model，请务必清楚每一步操作所生成的SQL是什么，建议安装DEBUG插件查看
+
+              2.【建议】程序连接MySQL（或者其它数据库mongo、redis等等），必须要有连接超时和失败重连机制，且失败重试必须有间隔时间。
+
+              > 某些场景下慎用重试机制，如创建订单、支付等
+
+              3.【建议】程序报错里尽量能够提示MySQL原生态的报错信息，便于排查错误。
+
+              4.【建议】对于有连接池的程序，必须根据业务需要配置初始、最小、最大连接数，超时时间以及连接回收机制，否则会耗尽数据库连接资源，造成线上事故。
+
+              5.【建议】对于`log`或`history`类型的表，随时间增长容易越来越大，因此上线前必须建立表数据清理或归档方案。
+
+              6.【建议】在应用程序设计阶段，开发必须考虑并规避数据库中主从延迟对于业务的影响。尽量避免从库短时延迟（20秒以内）对业务造成影响，建议强制一致性的读开启事务走主库，或更新后过一段时间再去读从库。
+
+              7.【建议】多个并发业务逻辑访问同一块数据（innodb表）时，会在数据库端产生行锁甚至表锁导致并发下降，因此建议更新类SQL尽量基于主键去更新。
+
+              8.【建议】业务逻辑之间加锁顺序尽量保持一致，否则会导致死锁。
+
+              9.【建议】对于单表读写比大于10:1的数据行或单个列，可以将热点数据放在缓存里（如mecache或redis），加快访问速度，降低MySQL压力。
+
+              10.【高危】禁止从开发环境，测试环境直接连接生产环境数据库
+
+              11.【建议】对于超过100W行的大表进行`alter table`，须经过审核，并在业务低峰期执行。
+
+              > 因为`alter table`会产生表锁，期间阻塞对于该表的所有写入，对于业务可能会产生极大影响。
+
+              12.【建议】建议使用预编译语句进行数据库操作
+
+              > 预编译语句可以重复使用这些计划，减少SQL编译所需要的时间，还可以解决动态SQL所带来的SQL注入的问题，只传参数比传递SQL语句更高效，相同语句可以一次解析多次使用，提高处理效率。现代框架一般都实现了预编译。
+
+              13.【建议】程序连接不同的数据库使用不同的账号，禁止跨库查询，遵循权限最小原则，程序使用的账号原则上不准有drop权限。
+
+              > 为数据库迁移和分库分表留出余地，降低业务耦合度。
+
+              14.【建议】减少同数据库的交互次数
+
+              > 数据库更适合处理批量操作，合并多个相同的操作到一起，可以提高处理效率。
+
+              15.【建议】拆分复杂的大SQL为多个小SQL
+            </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <p>2021.Flyde website All rights reserved.<a target="_blank" href=""></a></p>
+            <p><a target="_blank" href="https://beian.miit.gov.cn">粤ICP备2021163216号</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Scripts -->
+    <script src="static/js/jquery-3.6.0.min.js"></script>
+
+  </body>
+</html>
